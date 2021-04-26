@@ -13,7 +13,7 @@ win.geometry(str(geox)+'x'+str(geoy))
 
 def gtn():
     def endgame(*args):
-        global entnum, lblanimation1, run
+        global entnum, lblanimation1, run, atm
 
         run = 0
         entnum.delete(0, 'end')
@@ -27,6 +27,7 @@ def gtn():
                 progrbar.destroy()
                 lblanimation1.destroy()
                 exit.destroy()
+                attempts.destroy()
                 reset.destroy()
                 btnstart = Label(win)
                 entnum.delete(0, 'end')
@@ -34,22 +35,28 @@ def gtn():
 
         exit = Button(win, text="Exit")
         reset = Button(win, text="Play Again")
+        attempts = Label(win, text="Attempts: "+str(atm), font=("Comic Sans", 11), background=mainbg)
 
         starty = geoy
         endy = 300
 
         y1 = starty
         y2 = starty
+        y3 = starty
+        x3 = (len(str(atm))-1)*5
         step = 75
         exit.place(x=75, y=y1)
         reset.place(x=280, y=y2)
         for i in range(step):
             y1 += (endy-y1)/15
             y2 += (endy-y2)/15
+            y3 += (endy-y3)/12
             exit.place(x=75, y=y1)
             reset.place(x=280, y=y2)
+            attempts.place(x=179-x3, y=y3)
             exit.update()
             reset.update()
+            attempts.update()
             time.sleep(0.01)
 
         exit.config(command= lambda: restart(0))
@@ -133,7 +140,7 @@ def gtn():
         progrbar.place(x=0, y=200)
 
     def setup(f):
-        global entnum, btnstart, background, prtext, an, dif, run, predif
+        global entnum, btnstart, background, prtext, an, dif, run, predif, atm
         if f == 0:
             lbltitle = Label(win, text="Weclome!", font=("Comic Sans", 57), background=mainbg)
             lbltitle.place(x=0, y=0)
@@ -149,6 +156,7 @@ def gtn():
         elif f == 1:
             prtext = ""
             an = 0
+            atm = 0
             dif = ""
             predif = dif
             run = 1
@@ -174,10 +182,11 @@ def gtn():
             entnum.insert(0, prtext)
 
     def checkanswer(*args):
-        global entnum, rn, dif, predif, an, at, progrbar
+        global entnum, rn, dif, predif, an, at, progrbar, atm
 
         if entnum.get() != "":
             a = int(entnum.get())
+            atm += 1
 
             predif = dif
             progrbar['value'] = a
